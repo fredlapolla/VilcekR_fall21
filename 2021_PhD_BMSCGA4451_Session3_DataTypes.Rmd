@@ -1,0 +1,181 @@
+---
+title: "R for Scientific Researchers: Data Types"
+author: "Fred LaPolla"
+date: "9/28/2021"
+output: slidy_presentation
+---
+
+## Review
+
+R provides an environment to load in data and analyze it. 
+
+
+>- What is the command for loading in a CSV?
+
+>- What is one command we could use to summarize or get a sense of what is in our file?
+
+>- What is a package and what 2 commands do we need to install and run one?
+
+***
+
+## Objectives
+
+Students will be able to:
+
+>- Identify data types that R works with
+>- Name and explain the data structures that exist in R
+>- Look up the data structure of an object
+>- Change the data type of an object
+
+***
+
+## Starting up
+
+</br>
+</br>
+</br>
+
+Pulling in last week's data:
+
+```{r echo = TRUE}
+crusio1 <- read.csv("https://raw.githubusercontent.com/fredlapolla/VilcekR_fall21/main/Crusio1.csv")
+```
+
+***
+
+## Data Types in R
+
+</br>
+</br>
+</br>
+
+R works with several types of data. Think of these as the sorts of things that appear in a given cell in a spreadsheet. 
+
+>- Character
+>- Numeric
+>- Integer
+>- Factor (i.e. categorical or ordinal variable)
+>- Logical (T/F)
+>- Complex (think the imaginary number i)
+
+***
+
+## Character
+
+
+</br>
+</br>
+</br>
+
+Character data means that R is treating text like it is words. 
+
+Imagine we created a spreadsheet of members of your lab. Everyone's name would be a character: Eg "Fred"
+
+**Note of caution:** sometimes R reads in data in ways that we do not want it to, if it sees even one random letter (say a typo) in a column of numbers it will treat that as a character. Sometimes it will read in character strings as a great deal of factor values. 
+
+***
+
+## Numeric and Integer
+
+</br>
+
+
+>- Numeric data is any number e.g. 12, 13.5 etc.
+>- Integer data is a rounded integer and is written with an L: e.g. 12L 13L etc.
+>- **Important** Sometimes what appears to us as a number is being read as a character. It will appear with quotes as "12" or "13.5" to let us know R is not reading it as a number. 
+
+***
+
+## Factor
+
+</br>
+</br>
+</br>
+
+A factor variable is a value that can have one of several options, e.g. Place of residence: Manhattan, Brooklyn, the Bronx, Queens, Staten Island, Other. 
+
+In R, factor variables can be ordered, e.g. First year, Second Year, Third Year students. These are often called ordinal variables.  Factors can also be unordered like in the NYC boros above. 
+
+***
+
+## Factor Levels and Labels
+
+</br>
+</br>
+</br>
+
+When you work with factor variables, the different choices are called "levels." You can rename levels using a levels() command, but it is important that the order of the levels match the existing order. 
+
+```{r}
+crusio1$attack_combine <- factor(crusio1$attack_combine, levels = 0:1)
+summary(crusio1$attack_combine)
+```
+
+
+```{r}
+levels(crusio1$attack_combine) <- c("No_Attack", "Attack")
+summary(crusio1$attack_combine)
+```
+
+***
+
+## Alternate approach with Labels
+
+You can also do this with labels for the levels. 
+
+An "in the weeds" explanation: Levels and labels are not the same as in SPSS, what this is doing is looking at the AGEGROUP column, saying that the groups (or levels) for this group are the integers 1,2,3, and then assigning as a name the Youth, Middle and Aged labels. 
+
+```{r}
+crusio1$attack_d1 <- factor(crusio1$attack_d1, levels = 0:1, labels = c("No_Attack", "Attack"))
+summary(crusio1$attack_d1)
+```
+
+
+**Note:** Similar to the examples above, sometimes R reads in character strings as factors. If your cell/gene IDs are listing with "levels" you may have to change the type of data. 
+
+***
+
+## Logical
+
+</br>
+</br>
+</br>
+
+R understands TRUE and FALSE as concepts. 
+
+TRUE is equivalent to 1 and FALSE to 0. 
+
+This means you can find sums of arguments that meet criteria to see how many are true, or you can use means to find proportions. An example of finding the proportion can be seen:
+
+```{r}
+mean(crusio1$bw < 20, na.rm=TRUE)
+```
+
+To find the proportion of mice under 20 g. This is because "crusio1$bw<20" runs through every value in the column and assigns TRUE, i.e. 1, if they are less than 20 g, and FALSE, 0, if over 20. So mean is the same as summing all those ones and dividing by the total, which is the same as finding a proportion. 
+
+
+***
+
+## Determining the data type
+
+</br>
+</br>
+</br>
+
+If you run class() on a column of data, you will get the data type of that column:
+
+```{r}
+class(crusio1$sex)
+```
+
+
+Try on your own and find the class of three columns of data. What are they?
+
+```{r}
+
+```
+
+
+
+
+

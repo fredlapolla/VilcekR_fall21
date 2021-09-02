@@ -1,0 +1,257 @@
+---
+title: 'R for Scientific Researchers VI: Exploratory Data Visualization'
+author: "Fred LaPolla"
+date: "10/7/2021"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data Visualization
+
+***
+
+## Objectives
+
+</br>
+</br>
+</br>
+
+Students will be able to:
+
+>- Explore their data to visually assess skew
+>- Build histograms, boxplots, qq plots, and scatter plots
+>- Choose appropriate visualizations for the type of data they are trying to visualize
+>- Customize their figures
+
+***
+
+## Getting started
+
+Let's pull in our same crusio1 data set. 
+
+```{r, echo = TRUE}
+crusio1 <- read.csv("https://raw.githubusercontent.com/fredlapolla/VilcekR_fall21/main/Crusio1.csv")
+  
+```
+
+There are two major reasons we might want to visualize our data: exploration and communication. 
+
+***
+
+## Data Exploration
+
+</br>
+</br>
+</br>
+
+In the first class, what were some of the ways we discussed to get a sense of our data? Why do we do this?
+
+>- Summary
+>- paste.ecs::stat.desc
+>- psych::describe
+>- Others
+
+
+
+In addition to getting an understanding of our data, these tools help us understand what sort of tests are possible on our data type.
+
+
+
+***
+
+## Data Exploration
+
+</br>
+</br>
+</br>
+
+One of the first things we may want to know is "Is my data normally distributed"? Why might we want to know this?
+
+>- Different statistical tests for hypothesis testing assume a Gaussian or Normal Distribution
+
+>- A quick way to get a sense of the nature of our distribution is to look at a picture, and a common option is a **Histogram**
+
+***
+
+## Data Exploration
+
+
+The command hist() let's us make a histogram:
+
+```{r, echo = TRUE}
+#For today don't worry about par, this is to plot three charts side by side
+threechart <-par(mfrow = c(1,3))
+#this is the meat of the matter
+hist(crusio1$bw)
+
+hist(crusio1$activity)
+
+hist(crusio1$num_arms_d1)
+par(mfrow = c(1,1))
+```
+
+***
+
+## Hist colors
+
+
+You could also give it a fill if you want:
+
+```{r, echo = TRUE}
+hist(crusio1$activity, col = "steelblue")
+```
+
+
+***
+
+## Group Work
+
+Try to make a histogram of center time and a histogram of task time on day 1. Are these normally distributed? Are they skewed, and if so, which way?
+
+```{r}
+
+```
+
+
+***
+
+## Boxplot
+
+
+
+We can also use boxplots, sometimes also called Box and Whisker or Tukey plots. 
+
+```{r, echo = TRUE}
+boxplot(crusio1$activity)
+```
+
+Boxplots display: the median, quartiles and outliers (which are by default 1.5 x the interquartile range above or below the quartiles). You can tell if there is relatively a lot of skew or not because the median will be near the mean. 
+
+*** 
+
+## Boxplots
+
+
+
+You can also use boxplots to look at comparisons of groups. 
+
+```{r, echo = TRUE}
+boxplot(crusio1$activity ~ crusio1$sex)
+```
+
+***
+
+## Boxplots
+
+You can also add in a notch, which if the notch overlaps is a good rule of thumb that they are not statistically significantly different (but beware of statistical significance).
+
+```{r, echo = TRUE}
+boxplot(crusio1$activity ~ crusio1$sex, notch = TRUE)
+```
+
+***
+
+## Boxplots
+
+With a color
+
+```{r, echo = TRUE}
+boxplot(crusio1$activity ~ crusio1$sex, notch = TRUE, col = "pink")
+```
+
+*** 
+
+## Group Work
+
+Make a box plot of body weight by sex, for these mice. Are they likely the same for both groups?
+
+```{r}
+
+```
+
+
+
+***
+
+## QQ Plots
+
+
+Another option for looking at skew is the Quantile-Quantile Plot, or QQ Plot. This chart plots quantiles, similar to percentiles of our data against a normally distributed quantile. Baiscally, the more our data lies on a straight line, the more normal it is. Compare:
+
+```{r, echo=TRUE}
+#QQNorm plots how the quantiles of our sample compare to a theoretical normal distribution
+par(mfrow=c(1,2))
+##QQPlot for total cholesterol
+qqnorm(crusio1$activity, main = "Normal Q-Q Plot Total Activty")
+#QQLine adds a straight line for reference
+qqline(crusio1$activity)
+
+##QQPlot for 
+qqnorm(crusio1$errors_d1,main= "Normal Q-Q Plot Errors Day 1")
+qqline(crusio1$errors_d1)
+```
+
+
+
+***
+
+## Group Work
+
+Make a qq plot of task time on day one. Also make one for body weight. Would you expect either of these to be normal or skewed? How can you tell?
+
+```{r}
+
+```
+
+
+
+
+
+
+***
+
+## Correlations & Scatter Plots
+
+</br>
+</br>
+</br>
+
+Sometimes we may be running a correlation test. While running Pearson's or a Spearman Correlation test can give you results, it can also be nice to look at an image of that correlation to see how nicely (or not) the points seem to correlate. It should be noted this example is intuitively obvious since center_time is how long the mice were in the center of the field, and center_dist is how far the walked while there.
+
+```{r, echo = TRUE}
+plot(crusio1$center_time, crusio1$center_dist)
+cor.test(crusio1$center_time, crusio1$center_dist,  alternative = "two.sided", method = "pearson")
+```
+
+
+## Correlation & Scatter Plots
+
+</br>
+</br>
+</br>
+
+Sometimes, for example in cases where our scale has exponentially larger outliers or if it increases multiplicatively, it can be helpful to try to normalize our data so that the chart is more viewable. You could try a transformation like "log()". It is sometimes helpful to do the log +1 in this case because log(0) is negative infinity
+
+```{r, echo = TRUE}
+par(mfrow = c(1,2))
+plot(crusio1$lacun_L, crusio1$lacun_R)
+plot(log(crusio1$lacun_L+1), log(crusio1$lacun_R+1))
+```
+
+***
+
+## Assumptions
+
+In the above example, when we ran a Pearson's R correlation, we assume the variables are normally distributed. If we did not assume normal distribution, we would run a correlation to find Spearman's Rho. If we had a very small sample we could run a Fisher's Exact Test. 
+
+## Group Work
+
+If we wanted to make a scatter plot of errors on day 1 vs activity, how would we do it? Based on what you now know about assessing skew, what test might we run for this?
+
+```{r}
+
+```
+

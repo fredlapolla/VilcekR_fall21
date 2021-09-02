@@ -1,0 +1,337 @@
+---
+title: "R for Scientific Researchers 8: Presenting Data"
+author: "Fred LaPolla"
+date: "10/14/21"
+output: slidy_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Visualization for Communication
+
+Pulling in data
+
+```{r, echo = TRUE}
+crusio1 <- read.csv("https://raw.githubusercontent.com/fredlapolla/VilcekR_fall21/main/Crusio1.csv")
+  
+```
+
+
+### GGPlot2
+
+
+While base plots like those above are fine for data exploration, often we will also need to create figures for a publication. 
+
+A good option is a package called GGPlot2, which stands for Grammar of Graphics (you will never need to know that)
+
+It is part of the tidyverse, so you should actually have it but just in case:
+
+```{r, echo = TRUE}
+#install.packages("ggplot2", repos = "http://cran.us.r-project.org")
+library(ggplot2)
+```
+
+*** 
+
+## GGPlot2
+
+</br>
+</br>
+</br>
+
+GGPlot is very common, so you should learn it, but it is also kind of weird relative to a lot of ways you might normally think about charts. GGPlot works by assigning values to aesthetic components of a chart (think x, y coordinates, colors, shapes etc), and then adds layers of shapes and labels to actually visualize these things. 
+
+This typically requires working in multiple steps. 
+
+## GGPlot2 Step1
+
+first we name the dataset and assign our basic X Y coordinates. Not all charts will have both. Let's start with a basic scatterplot 
+
+```{r, echo = TRUE}
+pic <- ggplot(crusio1, aes(x = activity, y = bw))
+pic
+```
+
+
+When we run this, nothing happens, or seems to happen. 
+
+****
+
+## GGPlot2 Step 2
+
+</br>
+</br>
+</br>
+
+We next need to add a layer that tells R what sort of shape to map those aesthetic attributes onto:
+
+```{r, echo = TRUE}
+pic + geom_point()
+```
+
+
+***
+
+## A different Geom
+
+We could try a different "geom" but most do not actually make a lot of sense for this combination of variables:
+
+```{r, echo = TRUE}
+pic + geom_smooth()
+```
+
+
+
+There is **no need* to memorize these "geoms." Instead go to the Help up on the top menu and open the Cheatsheets. There are many cheatsheets, and they add when you install packages. This is a quick reference guide. 
+
+***
+
+## Combining Geoms
+
+We can combine these geoms to get a scatter plot with a fit line. Method = "lm" is an argument 
+
+```{r}
+pic + geom_point() + geom_smooth(method="lm")
+```
+
+***
+
+## Group Work
+
+Try making a chart with both points and a line for center time vs center distance.
+
+```{r}
+
+```
+
+
+***
+
+
+## GGPlot 2 Making Histograms and Boxplots
+
+So now if we want to make charts like those above we can:
+
+Histograms
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = errors_d1, y = ..count..)) +geom_bar()
+```
+
+***
+
+## Histogram Bins
+
+
+We can also set the binwidth
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = errors_d1, y = ..count..)) +geom_bar(width = 5)
+```
+
+```{r}
+ggplot(crusio1, aes(x = errors_d1, y = ..count..)) +geom_bar(width = 20)
+
+
+```
+
+***
+
+## Boxplots
+
+For boxplots
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = sex, y =errors_d1 ))+geom_boxplot()
+```
+
+***
+
+## Group work
+
+Make a histogram of center distance travelled, experiment with updating the binwidth. Make a boxplot of body weight by attack combined.
+
+```{r}
+
+```
+
+***
+
+## Error Bars
+
+We can use a layer called stat_summary to add visualizations that are not derived from raw counts, like mean values or confidence intervals:
+
+```{r}
+crusio1$attack_combine <- factor(crusio1$attack_combine)
+ggplot(crusio1, aes(x = attack_combine, y = bw)) + stat_summary(fun = mean, geom="bar",fill = "white", color = "black") + stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = .5) 
+```
+
+***
+
+## Group Work
+
+Make a bar chart comparing the mean brainweight of attacking mice with error bars. 
+
+```{r}
+
+```
+
+
+
+***
+
+## GGPlot for formatting
+
+</br>
+</br>
+</br>
+
+
+One of the first things we might try is formatting by color. Color could serve two purposes: meaning can be encoded in color or for design. By encoding meaning, I mean that the color tells us information, for example in the heatmap. 
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = activity, y = errors_d1, col = as.factor(sex)))+geom_point()
+```
+
+***
+
+## Color continued
+
+</br>
+</br>
+</br>
+
+A quirk of ggplot is that colors of points are encoded col, but if you want bars to be filled, you must use fill:
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = errors_d1, y = ..count.., fill = sex)) +geom_bar(binwidth = 10)
+
+```
+
+*** 
+
+## Color Palettes
+
+</br>
+</br>
+</br>
+
+You can also use color blind friendly palettes, like those offered by the package colorbrewer2
+
+```{r, echo = TRUE}
+#install.packages("RColorBrewer", repos = "http://cran.us.r-project.org")
+library(RColorBrewer)
+display.brewer.all(colorblindFriendly = TRUE)
+```
+
+Then:
+
+```{r, echo = TRUE}
+
+ggplot(crusio1, aes(x = center_time, y = center_dist, col = sex))+geom_point() + scale_color_brewer(palette = "Dark2")
+```
+
+***
+
+## Group Work
+
+Explore the color brewer scales. Try using "display.brewer.all(colorblindFriendly = T)" to see the color blind friendly palettes. Add a color blind friendly palette to a chart of activity time vs. center distance, coloring by if they attacked or not (attack_combine)
+
+```{r}
+
+```
+
+
+***
+
+## Scales
+
+</br>
+</br>
+</br>
+
+We may also want to change up the scales. The plot we just made aonly had tick marks every 100, but that is too large a scale for cholesterol. the seq() command takes in a starting value, a finishing value and a number to count by. 
+
+```{r, echo = TRUE}
+
+ggplot(crusio1, aes(x = center_time, y = center_dist, col = sex))+geom_point() + scale_color_brewer(palette = "Dark2") + scale_x_continuous(breaks = seq(0, 100, 10))
+```
+
+
+We could do the same for the y scale:
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = center_time, y = center_dist, col = sex))+geom_point() + scale_color_brewer(palette = "Dark2") + scale_x_continuous(breaks = seq(0, 100, 10))+scale_y_continuous(breaks = seq(0, 12000, 3000))
+```
+
+***
+
+## Group Work
+
+Make a chart of activity time vs. center distance and adjust the x access to have labeled breaks in increments of 2500 and the Y access in increments of 2000. 
+
+```{r}
+
+```
+
+
+***
+
+## Labels
+
+</br>
+</br>
+</br>
+
+We can also relabel the labels to make it more presentable for a paper, poster or talk. Perhaps you are noticing a trend that at first seems strange in ggplot but makes life easier: we keep making changes by adding arguments on to the end. This means once you get your baseline plot drawn you can then experiment on customizing for publication. 
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = center_time, y = center_dist, col = sex))+geom_point() + scale_color_brewer(palette = "Dark2") + scale_x_continuous(breaks = seq(0, 100, 10))+scale_y_continuous(breaks = seq(0, 12000, 3000)) + xlab("Time in Center") + ylab("Distance Traveled in Center")
+
+```
+
+***
+
+## Themes
+
+</br>
+</br>
+</br>
+
+We can also customize the overall "look" of the chart with a theme. As you start adding "theme_" R will suggest options, try them out to see which you like. The second theme argument removes a redundant label on the legend. 
+
+
+
+```{r, echo = TRUE}
+ggplot(crusio1, aes(x = center_time, y = center_dist, col = sex))+geom_point() + scale_color_brewer(palette = "Dark2") + scale_x_continuous(breaks = seq(0, 100, 10))+scale_y_continuous(breaks = seq(0, 12000, 3000)) + xlab("Time in Center") + ylab("Distance Traveled in Center") + theme_minimal() + theme(legend.title = element_blank()) 
+
+```
+
+***
+
+## Group Work
+
+Copy your last chart and try out some of the themes available in Ggplot to update the background. What contexts would you want a lighter vs a darker background?
+
+```{r}
+
+```
+
+***
+
+## Things to consider when choosing colors and themes
+
+</br>
+</br>
+</br>
+
+>- Accessibility (color blind friendly palettes can help).
+>- Where will this be seen? Large rooms like conference plenaries, might benefit from a dark background with light points, bright rooms with slide projectors will benefit from light backgrounds and dark points. 
+>- Posters assume that readers have limited time and need a simple message.
+>- In journal papers provide enough information that a user can understand without flipping to additional information. 
+>- Avoid gimmicks like 3D designs. 
+
+
+

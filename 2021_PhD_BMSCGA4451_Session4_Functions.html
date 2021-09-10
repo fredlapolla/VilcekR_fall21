@@ -571,6 +571,10 @@ Fred LaPolla
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">doubleMeanFunc</span>(n)</span></code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>The general format is function(x,y){<strong>some command</strong>}. You do not have to have multiple variables.</p>
+<p>#Breakout work</p>
+<p>Write a function to calculate the Z score of bodyweight (bw). A Z score is a standardized number letting us know essentially how “far” a given value is from the average value of a column, when accounting for how much variation there is in that column. It is a useful tool for knowing if a given value is close to the average, given how much difference there is in the group, or if it is a value far from average. Z Scores are used in many statistical tests you will learn about in the second half of the course. The formula is:</p>
+<p>Z = (x-mu)/sd</p>
+<p>Where X is a given value, mu is the mean value of x, and sd is the standard deviation of x.</p>
 </div><div id="repeating-functions" class="slide section level2">
 <h1>Repeating functions</h1>
 <p></br> </br> </br></p>
@@ -630,9 +634,9 @@ Fred LaPolla
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">apply</span>(crusio1[,<span class="dv">10</span><span class="op">:</span><span class="dv">15</span>], <span class="dv">2</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>##     activity         lean         rear         jump        defec   groom_freq 
 ## 10279.834792    78.648796    48.367615     3.206783     3.687090     6.582057</code></pre>
-</div><div id="apply-1" class="slide section level2">
-<h1>Apply</h1>
-<p>Try applying a function across several columns or rows of your data:</p>
+</div><div id="apply-breakoutwork" class="slide section level2">
+<h1>Apply Breakoutwork</h1>
+<p>Use apply to find the Z scores of the center_dist, center_time, periphery_dist and periphery_time columns of crusio1:</p>
 </div><div id="sapply" class="slide section level2">
 <h1>Sapply</h1>
 <p>sapply() is a relatively simple option that runs on columns meaning you don’t need to specify the margin and returns a vector or matrix:</p>
@@ -764,6 +768,10 @@ Fred LaPolla
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>crusio1[,<span class="dv">86</span>]&lt;-<span class="st"> </span><span class="ot">NA</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a><span class="kw">colnames</span>(crusio1[<span class="dv">86</span>])&lt;-<span class="st">&quot;weightDichotomy&quot;</span></span>
 <span id="cb46-3"><a href="#cb46-3"></a>crusio1<span class="op">$</span>weightDichotomy&lt;-<span class="st"> </span><span class="kw">ifelse</span>(crusio1<span class="op">$</span>bw <span class="op">&gt;</span><span class="st"> </span><span class="fl">29.00</span>, crusio1<span class="op">$</span>weightDichotomy &lt;-<span class="st"> </span><span class="dv">1</span>, crusio1<span class="op">$</span>weightDichotomy &lt;-<span class="st"> </span><span class="dv">0</span>)</span></code></pre></div>
+</div><div class="slide section level2">
+
+<p>#Breakout work</p>
+<p>Try using ifelse and quantile to make a dichotomous variable separating the top fifth of center times (so 80% and up as a quantile), from other values</p>
 </div><div id="tidy-data" class="slide section level2">
 <h1>Tidy Data</h1>
 <p>Often the data we have to work with needs to be organized in some way, for example we may only want a subset or be interested in certain values. While this can be done using indexing and if statements, R has packages that make it easier to do this.</p>
@@ -805,10 +813,10 @@ Fred LaPolla
 ## ------------------------------------------------------------ 
 ## crusio1$sex: m
 ## [1] 10299.78</code></pre>
-</div><div id="use-of-filter-and-operators" class="slide section level2">
-<h1>Use of filter and operators</h1>
+</div><div id="use-of-filter-and-operators-breakout" class="slide section level2">
+<h1>Use of filter and operators: Breakout</h1>
 <p></br> </br> </br></p>
-<p>You can combine these terms with the filter command to make subsets that meet certain criteria. Maybe you would only want gene expression levels above some threshold. In this case try filtering to only work with mice in the upper quadrant.</p>
+<p>You can combine these terms with the filter command to make subsets that meet certain criteria. Maybe you would only want gene expression levels above some threshold. Try filtering to only have mice who attacked on either day (attack_combine).</p>
 </div><div id="select" class="slide section level2">
 <h1>Select</h1>
 <p></br> </br> </br></p>
@@ -834,11 +842,12 @@ Fred LaPolla
 <pre><code>## Bioconductor version 3.12 (BiocManager 1.30.16), R 4.0.3 (2020-10-10)</code></pre>
 <pre><code>## Warning: package(s) not installed when version(s) same as current; use `force = TRUE` to
 ##   re-install: &#39;Biobase&#39;</code></pre>
-<pre><code>## Old packages: &#39;akima&#39;, &#39;cachem&#39;, &#39;gert&#39;, &#39;htmltools&#39;, &#39;httpuv&#39;, &#39;later&#39;,
-##   &#39;magick&#39;, &#39;matrixStats&#39;, &#39;R6&#39;, &#39;rbibutils&#39;, &#39;RCurl&#39;, &#39;readr&#39;, &#39;reprex&#39;,
-##   &#39;RJSONIO&#39;, &#39;rmarkdown&#39;, &#39;RSQLite&#39;, &#39;showtext&#39;, &#39;stringi&#39;, &#39;survival&#39;,
-##   &#39;sysfonts&#39;, &#39;tibble&#39;, &#39;tinytex&#39;, &#39;treemap&#39;, &#39;vroom&#39;, &#39;waldo&#39;, &#39;widyr&#39;,
-##   &#39;xfun&#39;, &#39;XML&#39;</code></pre>
+<pre><code>## Old packages: &#39;akima&#39;, &#39;bslib&#39;, &#39;cachem&#39;, &#39;gert&#39;, &#39;ggsignif&#39;, &#39;htmltools&#39;,
+##   &#39;htmlwidgets&#39;, &#39;httpuv&#39;, &#39;knitr&#39;, &#39;later&#39;, &#39;lava&#39;, &#39;magick&#39;, &#39;maptools&#39;,
+##   &#39;matrixStats&#39;, &#39;nlme&#39;, &#39;openssl&#39;, &#39;plotrix&#39;, &#39;pls&#39;, &#39;pROC&#39;, &#39;R6&#39;,
+##   &#39;rbibutils&#39;, &#39;RCurl&#39;, &#39;readr&#39;, &#39;reprex&#39;, &#39;RJSONIO&#39;, &#39;rmarkdown&#39;, &#39;roxygen2&#39;,
+##   &#39;RSQLite&#39;, &#39;showtext&#39;, &#39;stringi&#39;, &#39;survival&#39;, &#39;sysfonts&#39;, &#39;tibble&#39;,
+##   &#39;tinytex&#39;, &#39;treemap&#39;, &#39;vroom&#39;, &#39;waldo&#39;, &#39;widyr&#39;, &#39;xfun&#39;, &#39;XML&#39;</code></pre>
 </div><div class="slide section level2">
 
 </div>

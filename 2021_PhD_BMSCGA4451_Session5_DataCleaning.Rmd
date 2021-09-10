@@ -112,7 +112,7 @@ Other options than removing the NAs are to impute a value like a mean or a media
 
 ## Group Work
 
-Try using is.na and na.omit to remove from bw and task_time_d1 respectively.
+Try using is.na to remove from bw
 
 ```{r}
 
@@ -148,7 +148,7 @@ summary(crusio1$sex)
 
 ## Group Work
 
-Try using recode_factor to change the values of attack_combine to "no" and "yes" (this is just for practice, so don't worry about the prior point with numerical values for modelling).
+Try using recode_factor to change the values of attack_combine to "no" and "yes".
 
 ```{r}
 

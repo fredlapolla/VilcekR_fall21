@@ -187,7 +187,7 @@ Heatmap(C, col = brewer.pal(7,"BuGn"))
 ***
 ## Group work
 
-Explore the R Color Brewer Palettes and try a different coloration for a heatmap. 
+Explore the R Color Brewer Palettes and try a different color palette for a heatmap. 
 
 ***
 

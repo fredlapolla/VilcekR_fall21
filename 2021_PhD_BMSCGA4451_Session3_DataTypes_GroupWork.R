@@ -3,4 +3,9 @@
 
 
  
-#Make attack_d1 into a factor variable. Try recoding 0 to be labeled no_attack and 1 to be attack.
+#1. Make attack_d1 into a factor variable. Try recoding 0 to be labeled no_attack and 1 to be attack.
+
+
+
+#2. Try on your own and find the class of three columns, sex, bw and attack_d1. What are they?
+  

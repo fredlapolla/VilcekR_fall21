@@ -14,7 +14,6 @@
   
 
 # Group Work 3
-#Breakout work
 
 #Try using ifelse and quantile to make a dichotomous variable separating the top fifth of center times (so 80% and up as a quantile), from other values
 

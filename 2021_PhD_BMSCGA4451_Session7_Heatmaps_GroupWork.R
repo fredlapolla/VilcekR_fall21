@@ -1,5 +1,7 @@
 #Group Work
 
+dolgalevNormRNA <- read.csv("https://raw.githubusercontent.com/fredlapolla/VilcekR_fall21/main/counts.normalized.csv")
+
 #1. Convert the following data into a matrix, with rownames for the genes being named. Re-order the columns to group WT and KO mice strains together. Make subsets of highly expressed genes (choose your own threshold) 
 
 
